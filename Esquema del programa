@@ -1,0 +1,57 @@
+#
+#Joseline Ortiz
+
+from SimPy.Simulation import *
+from random import uniform, Random
+
+
+class new(Process):
+    def __init__(self,id):
+        Process.__init__(self)
+        self.name=id
+
+    #Solicitud de cantidad de memoria
+    memoria = random.randint(1, 10)
+
+    #Compara si memoria esta disponible
+    if (memoria...)
+        #Se va a ready
+    else
+        #Sigue esperando
+
+    
+class ready(Process):
+    def __init__(self,id):
+        Process.__init__(self)
+        self.name=id
+
+    #Solicitud de cantidad de intrucciones totales a realizar
+    contador = random.randint(1, 10)
+
+
+class running(Process):
+    def __init__(self,id):
+        Process.__init__(self)
+        self.name=id
+
+    #Ir al CPU
+        
+    if contador >= 3
+        
+        #Actualizacion del contador
+        contador = contador - 3
+    else if (condador < 3)
+        #Salir del CPU
+
+    numero = random.randint(1,2)
+    
+    if (contador <3)
+        estado = "terminated"
+        #Salir del programa
+
+    else if (numero = 1)
+        #Pasa a la cola de Waiting
+        #Al salir ... pasa a Ready
+
+    else if (numero = 2)
+        #Pasa a la cola de Ready    
