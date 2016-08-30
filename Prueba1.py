@@ -5,51 +5,51 @@ from SimPy.Simulation import *
 from random import uniform, Random
 
 #new: el proceso llega al sistema operativo pero debe esperar que se le asigne
-#memoria RAM. En nuestra simulaciÛn el proceso solicitar· una cantidad de memoria
-#(n˙mero entero al azar entre 1 y 10). Si hay memoria disponible puede pasar al
+#memoria RAM. En nuestra simulaci√≥n el proceso solicitar√° una cantidad de memoria
+#(n√∫mero entero al azar entre 1 y 10). Si hay memoria disponible puede pasar al
 #estado de ready. En caso contrario permanece haciendo cola, esperando por
 #memoria. NOTA: la cantidad de memoria disponible se disminuye con la cantidad
-#de memoria que emplear· el proceso que logrÛ obtenerla.
+#de memoria que emplear√° el proceso que logr√≥ obtenerla.
 
-#ready: el proceso est· listo para correr pero debe esperar que lo atienda el CPU.
+#ready: el proceso est√° listo para correr pero debe esperar que lo atienda el CPU.
 #El proceso tiene un contador con la cantidad de instrucciones totales a realizar
-#(n˙mero entero al azar entre 1 y 10). Cuando se desocupa el CPU puede pasar a
+#(n√∫mero entero al azar entre 1 y 10). Cuando se desocupa el CPU puede pasar a
 #utilizarlo.
 
 #running: el CPU atiende al proceso por un tiempo limitado, suficiente para
-#realizar solamente 3 instrucciones (esto ser· configurado, ya que podr· crecer
-#o reducirse). Al completarse el tiempo de atenciÛn el proceso es retirado del
+#realizar solamente 3 instrucciones (esto ser√° configurado, ya que podr√° crecer
+#o reducirse). Al completarse el tiempo de atenci√≥n el proceso es retirado del
 #CPU. Se debe actualizar el contador de instrucciones a realizar, disminuyendo
-#las 3 instrucciones que ejecutÛ en esta oportunidad. Si el proceso tiene menos
+#las 3 instrucciones que ejecut√≥ en esta oportunidad. Si el proceso tiene menos
 #de tres instrucciones que le hace falta procesar, libera el CPU anticipadamente.
 
-#Al finalizar la atenciÛn del CPU puede ocurrir:
+#Al finalizar la atenci√≥n del CPU puede ocurrir:
 #a)Terminated: Si el proceso ya no tiene instrucciones por realizar entonces pasa
-#al estado ìterminatedî y sale del sistema.
-#b)Waiting: al dejar el CPU se genera un n˙mero entero al azar entre 1 y 2 . Si
+#al estado ‚Äúterminated‚Äù y sale del sistema.
+#b)Waiting: al dejar el CPU se genera un n√∫mero entero al azar entre 1 y 2 . Si
 #es 1 entonces pasa a la cola de Waiting para hacer operaciones de I/O
-#(entrada/salida). Al dejar esa cola regresa a ìreadyî.
-#c)Ready: al dejar el CPU y el n˙mero generado al azar es 2 entonces se dirige
-#nuevamente a la cola de ìreadyî.
+#(entrada/salida). Al dejar esa cola regresa a ‚Äúready‚Äù.
+#c)Ready: al dejar el CPU y el n√∫mero generado al azar es 2 entonces se dirige
+#nuevamente a la cola de ‚Äúready‚Äù.
 
-#La creaciÛn de procesos sigue una distribuciÛn exponencial con intervalo = 10.
-#Recordar que entonces se generan los n˙meros al azar para simular la llegada de
+#La creaci√≥n de procesos sigue una distribuci√≥n exponencial con intervalo = 10.
+#Recordar que entonces se generan los n√∫meros al azar para simular la llegada de
 #procesos con: random.expovariate(1.0 / interval)
 
 #La cantidad de memoria RAM de la computadora es 100. Se usa un recurso tipo
 #Container  para simular la memoria. Se debe hacer cola para solicitar la
 #cantidad de memoria necesaria y se permanece en la cola hasta que se obtenga esa
-#cantidad. Al finalizar un proceso se regresa la cantidad de memoria que utilizÛ.
+#cantidad. Al finalizar un proceso se regresa la cantidad de memoria que utiliz√≥.
 
 #La velocidad del CPU se modela con que atiende un proceso en una 1 unidad de
 #tiempo, lo cual permite realizar tres instrucciones. Esto debe ser variable, ya
-#que podrÌamos decir luego que tenemos un procesador m·s r·pido que ejecuta m·s
+#que podr√≠amos decir luego que tenemos un procesador m√°s r√°pido que ejecuta m√°s
 #instrucciones en esa unidad de tiempo. El CPU es modelado con una cola tipo
 #Resource (capacidad = 1, es decir un solo CPU).
 
-#NOTA: para la generaciÛn de los n˙meros al azar utilice una semilla para que se
-#genere siempre la misma secuencia y asÌ se puedan hacer comparaciones cuando se
-#cambien los par·metros de la simulaciÛn: random.seed(RANDOM_SEED)
+#NOTA: para la generaci√≥n de los n√∫meros al azar utilice una semilla para que se
+#genere siempre la misma secuencia y as√≠ se puedan hacer comparaciones cuando se
+#cambien los par√°metros de la simulaci√≥n: random.seed(RANDOM_SEED)
 
 class proceso(Process):
     def __init__(self,id):
@@ -67,7 +67,7 @@ class proceso(Process):
             print "el proceso ",self.id," hace cola "
             yield request,self,
             print "%5.1f %s espera a pasar a ready %d" %(now(),self.id, self.turno)
-        else
+        else:
             #Sigue esperando
                 
 
