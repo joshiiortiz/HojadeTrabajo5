@@ -1,0 +1,77 @@
+# -*- coding: cp1252 -*-
+#Universidad del valle de Guatemala
+#Hoja de Trabajo 5
+#Michelle Morales
+#Joseline Ortiz
+#Simulacion de como una computadora procesa instrucciones, con variacion de: CPU, RAM y velocidad de procesamiento.
+#Uso de Simpy 3
+#Se tomo como refencia codigo de ejemplos proporcionados en el curso
+
+import simpy
+import random
+
+def ejecutar(paso1, lapso, mRam, memory, instruc, velocidad):
+    global time
+    global timeAcum
+    #Empieza la simulacion
+    yield paso1.timeout(lapso)
+    print('Tiempo actual: %f -- Ejecucion de un proceso, se utiliza: %d de RAM.' % (paso1.now, memory))
+    actualTime = paso1.now
+    yield mRam.get(memory)
+    print('Tiempo actual: %f -- Instruccion en proceso de ejecucion, se esta utilizando: %d de RAM.' % (paso1.now, memory))
+    contador = 0
+    #Comprueba si hay memoria disponible puede pasar al estado de ready.
+    #En caso contrario permanece haciendo cola, esperando por memoria.
+    while contador < instruc:
+        with cpu.request() as solicitud:
+            yield solicitud
+            if(instruc-contador)>=velocidad:
+                efectuar = velocidad
+            else:
+                efectuar = (instruc-contador)
+            print"Tiempo actual: %f -- Instruccion en proceso de ejecucion, el cpu ejecutara %d instrucciones." % (paso1.now,efectuar)
+            yield paso1.timeout(efectuar/velocidad)
+            contador += efectuar
+            print ("Tiempo actual: %f -- Instruccion en proceso de ejecucion, ejecutando..."% (paso1.now))
+        estado= random.randint(1,2)
+        if estado == 1 and contador<instruc:
+            with esperar.request() as solicitud2:
+                yield solicitud2
+                yield paso1.timeout(1)
+                print "Tiempo actual: %f -- Instruccion en proceso de ejecucion, se espera, las operaciones han sido finalizadas." % (paso1.now)	
+    yield mRam.put(memory)
+    print('Tiempo actual: %f --Instruccion procesada, totalmente ejecutada, queda %d de RAM'% (paso1.now, memory))	
+    timeAcum += (paso1.now - actualTime)	
+    time.append(paso1.now - actualTime)
+
+#Se define el valor semilla para la simulacion.	
+random.seed(2551)
+#Se definen las variables a utilizar 
+time = []
+timeAcum = 0.00
+espacioRam = 100
+velocidad = 3.0 
+procesos = 100
+paso1 = simpy.Environment()
+cpu = simpy.Resource (paso1, capacity = 1)
+mRam = simpy.Container(paso1, init=espacioRam, capacity = espacioRam)
+esperar = simpy.Resource(paso1, capacity=2)
+#Se cambia el valor del intervalo.
+intervalo = 1
+for i in range(procesos):
+    lapso = random.expovariate(1.0/intervalo)
+    memory = random.randint(1,10)
+    instruc = random.randint(1,10)
+    paso1.process(ejecutar(paso1, lapso, mRam, memory, instruc, velocidad))	
+paso1.run()
+#Impresion de tiempos de corrida: tiempo promedio de procesamiento y la desviacion estandar
+print "--------------------------"
+promedio = (timeAcum/procesos)
+print('El promedio de tiempo de ejecucion de los procesos es de: %f ----' % (promedio))
+sumatoria =0
+for x in time:
+    sumatoria += (x-promedio) **2
+desviacion= (sumatoria/(procesos-1))**0.5	
+print "--------------------------"
+print('La desviacion estandar del prom de tiempo de ejecucion es de: %f' %(desviacion))
+
